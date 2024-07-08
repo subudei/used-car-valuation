@@ -13,7 +13,7 @@ import { UsersModule } from './users/users.module';
       type: 'sqlite',
       database: 'db.sqlite',
       entities: [User, Report], //[__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      synchronize: true, // only for dev mode
     }),
     UsersModule,
     ReportsModule,

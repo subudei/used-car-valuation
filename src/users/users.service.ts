@@ -22,4 +22,29 @@ export class UsersService {
     // save() is used to persist the entity to the database. It takes the entity instance created using the create() method and saves it to the database table associated with the entity.
     return this.repo.save(user);
   }
+  findOne(id: number) {
+    return this.repo.findOneBy({ id });
+  }
+
+  find(email: string) {
+    return this.repo.find({ where: { email } });
+  }
+
+  async update(id: number, attrs: Partial<User>) {
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    Object.assign(user, attrs);
+    return this.repo.save(user);
+  }
+
+  async remove(id: number) {
+    //return this.repo.delete(id); one way to delete, only one call to the database , no need to find the user first, but it is not recommended
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return this.repo.remove(user);
+  }
 }

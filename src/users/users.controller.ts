@@ -1,12 +1,15 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -21,9 +24,14 @@ export class UsersController {
     this.usersService.create(body.email, body.password);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor) // ClassSerializerInterceptor is used to apply the class-transformer library to the response of the findUser method. This interceptor automatically transforms the response object using the class-transformer library before sending it back to the client. *removing password from the response, using the @Exclude() decorator in the User entity
   @Get('/:id')
-  findUser(@Param('id') id: string) {
-    return this.usersService.findOne(parseInt(id));
+  async findUser(@Param('id') id: string) {
+    const user = await this.usersService.findOne(parseInt(id));
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 
   @Get()

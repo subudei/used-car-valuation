@@ -1,6 +1,5 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -11,6 +10,7 @@ import {
   Query,
   UseInterceptors,
 } from '@nestjs/common';
+import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
@@ -24,7 +24,8 @@ export class UsersController {
     this.usersService.create(body.email, body.password);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor) // ClassSerializerInterceptor is used to apply the class-transformer library to the response of the findUser method. This interceptor automatically transforms the response object using the class-transformer library before sending it back to the client. *removing password from the response, using the @Exclude() decorator in the User entity
+  // @UseInterceptors(ClassSerializerInterceptor) // ClassSerializerInterceptor is used to apply the class-transformer library to the response of the findUser method. This interceptor automatically transforms the response object using the class-transformer library before sending it back to the client. *removing password from the response, using the @Exclude() decorator in the User entity
+  @UseInterceptors(SerializeInterceptor) // using custom interceptor to remove password from the response
   @Get('/:id')
   async findUser(@Param('id') id: string) {
     const user = await this.usersService.findOne(parseInt(id));

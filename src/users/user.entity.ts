@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+// import { Exclude } from 'class-transformer'; // Exclude is a decorator from the class-transformer library that allows you to exclude a property from the response object.
 import {
   AfterInsert,
   AfterRemove,
@@ -17,7 +17,7 @@ export class User {
   email: string;
 
   @Column()
-  @Exclude()
+  // @Exclude() // removing password from the response (nest docs), insted using custom interceptor to remove password from the response
   password: string;
 
   // decorator hooks

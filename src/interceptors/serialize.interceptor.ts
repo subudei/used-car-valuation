@@ -9,8 +9,11 @@ import { plainToInstance } from 'class-transformer';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+type ClassConstructor = {
+  new (...args: any[]): object;
+};
 // this is a custom Decorator, that cane be used to return objects in a specific format, based on the DTO provided
-export const Serialize = (dto: any) =>
+export const Serialize = (dto: ClassConstructor) =>
   UseInterceptors(new SerializeInterceptor(dto));
 
 export class SerializeInterceptor implements NestInterceptor {

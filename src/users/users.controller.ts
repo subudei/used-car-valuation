@@ -14,7 +14,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserDto } from './dtos/user.dto';
 import { UsersService } from './users.service';
-
+@Serialize(UserDto) // using custom interceptor to remove password from the response on all the methods(controllers) in this controller
 @Controller('auth')
 export class UsersController {
   constructor(private usersService: UsersService) {}
@@ -26,7 +26,7 @@ export class UsersController {
 
   // @UseInterceptors(ClassSerializerInterceptor) // ClassSerializerInterceptor is used to apply the class-transformer library to the response of the findUser method. This interceptor automatically transforms the response object using the class-transformer library before sending it back to the client. *removing password from the response, using the @Exclude() decorator in the User entity
   // @UseInterceptors(new SerializeInterceptor(UserDto)) // using custom interceptor to remove password from the response
-  @Serialize(UserDto)
+  // @Serialize(UserDto)
   @Get('/:id')
   async findUser(@Param('id') id: string) {
     const user = await this.usersService.findOne(parseInt(id));
@@ -37,7 +37,7 @@ export class UsersController {
   }
 
   // @UseInterceptors(new SerializeInterceptor(UserDto))
-  @Serialize(UserDto)
+  // @Serialize(UserDto)
   @Get()
   findAllUsers(@Query('email') email: string) {
     return this.usersService.find(email);

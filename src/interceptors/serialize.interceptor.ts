@@ -3,13 +3,19 @@ import {
   ExecutionContext,
   // useInterceptors,
   NestInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { UserDto } from 'src/users/dtos/user.dto';
+
+// this is a custom Decorator, that cane be used to return objects in a specific format, based on the DTO provided
+export const Serialize = (dto: any) =>
+  UseInterceptors(new SerializeInterceptor(dto));
 
 export class SerializeInterceptor implements NestInterceptor {
+  constructor(private dto: any) {}
+
   intercept(context: ExecutionContext, handler: CallHandler): Observable<any> {
     // intercept method is called before the request is handled by the route handler. It receives the ExecutionContext and CallHandler objects as parameters.
     // console.log(
@@ -25,7 +31,7 @@ export class SerializeInterceptor implements NestInterceptor {
         //   'I am running Interceptor - DATA after the handler ->',
         //   data,
         // );
-        return plainToClass(UserDto, data, {
+        return plainToInstance(this.dto, data, {
           excludeExtraneousValues: true,
         });
       }),

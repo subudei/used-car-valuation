@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { scrypt as _script, randomBytes } from 'crypto'; // crypto is a built-in module in Node.js that provides cryptographic functionality. The randomBytes function is used to generate a random salt, and the scrypt function is used to hash the password with the salt.
 import { promisify } from 'util'; // util is a built-in module in Node.js that provides utility functions for working with objects and strings. The promisify function is used to convert callback-based functions into Promise-based functions.
 import { UsersService } from './users.service';
@@ -31,5 +35,18 @@ export class AuthService {
     return user;
   }
 
-  login() {}
+  async login(email: string, password: string) {
+    const [user] = await this.usersService.find(email);
+    if (!user) {
+      throw new NotFoundException('no user with that credentials');
+    }
+
+    const [salt, storedHash] = user.password.split('.');
+
+    const hash = (await scrypt(password, salt, 32)) as Buffer;
+    if (storedHash !== hash.toString('hex')) {
+      throw new BadRequestException('incorrect password');
+    }
+    return user;
+  }
 }

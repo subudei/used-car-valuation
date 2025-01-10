@@ -8,6 +8,15 @@ Content-Type: application/json
   "password": "password"
 } 
 
+### Login user
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "bla_mail@mail.com",
+  "password": "password"
+}
+
 ### Find user by given ID
 
 GET http://localhost:3000/auth/1

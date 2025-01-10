@@ -29,6 +29,11 @@ export class UsersController {
     return this.authService.signup(body.email, body.password);
   }
 
+  @Post('/login')
+  login(@Body() body: CreateUserDto) {
+    return this.authService.login(body.email, body.password);
+  }
+
   // @UseInterceptors(ClassSerializerInterceptor) // ClassSerializerInterceptor is used to apply the class-transformer library to the response of the findUser method. This interceptor automatically transforms the response object using the class-transformer library before sending it back to the client. *removing password from the response, using the @Exclude() decorator in the User entity
   // @UseInterceptors(new SerializeInterceptor(UserDto)) // using custom interceptor to remove password from the response
   // @Serialize(UserDto)

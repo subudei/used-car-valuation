@@ -4,8 +4,8 @@ POST http://localhost:3000/auth/signup
 Content-Type: application/json
 
 {
-  "email": "bla_mail@mail.com",
-  "password": "password"
+  "email": "test_mail@mail.com",
+  "password": "password123"
 } 
 
 ### Login user
@@ -13,9 +13,16 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "bla_mail@mail.com",
-  "password": "password"
+  "email": "test_mail@mail.com",
+  "password": "password123"
 }
+
+### Currently signed in user
+GET http://localhost:3000/auth/userinfo
+
+### Logout user
+POST  http://localhost:3000/auth/logout
+
 
 ### Find user by given ID
 

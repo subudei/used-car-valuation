@@ -36,6 +36,7 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
+    // const user is destructured array because typeorm.find() method returns an array of users
     const [user] = await this.usersService.find(email);
     if (!user) {
       throw new NotFoundException('no user with that credentials');

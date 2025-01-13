@@ -37,8 +37,12 @@ export class UsersController {
   // }
 
   @Get('/userinfo')
-  userInfo(@Session() session: any) {
-    return this.usersService.findOne(session.userId);
+  async userInfo(@Session() session: any) {
+    const user = await this.usersService.findOne(session.userId);
+    if (!user) {
+      throw new NotFoundException('You are not logged in');
+    }
+    return user;
   }
 
   @Post('/signup')

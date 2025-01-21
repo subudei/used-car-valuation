@@ -18,7 +18,7 @@ Content-Type: application/json
 }
 
 ### Currently signed in user
-GET http://localhost:3000/auth/userinfo
+GET http://localhost:3000/auth/currentuser
 
 ### Logout user
 POST  http://localhost:3000/auth/logout

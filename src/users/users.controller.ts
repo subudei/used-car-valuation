@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   Session,
+  UseGuards,
 } from '@nestjs/common';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { AuthService } from './auth.service';
@@ -17,6 +18,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserDto } from './dtos/user.dto';
 // import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
+import { AuthGuard } from '../guards/auth.guard';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 
@@ -50,7 +52,9 @@ export class UsersController {
   //   return user;
   // }
 
-  @Get('/currentuser')
+  @Get('/currentuser') // route '/user-info' ??
+  // this route is protected by the AuthGuard
+  @UseGuards(AuthGuard)
   currentUser(@CurrentUser() user: User) {
     // user is the user object that we set in the CurrentUserInterceptor
     return user;
